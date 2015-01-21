@@ -21,6 +21,7 @@ public class PluginScannerTest {
       try {
         db.scanArchives(u);
       } catch (IOException ex) {
+        // Ignore
       }
     }
     Map<String, Set<String>> annotationIndex = db.getAnnotationIndex();
