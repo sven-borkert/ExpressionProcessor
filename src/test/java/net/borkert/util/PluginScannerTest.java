@@ -27,7 +27,7 @@ public class PluginScannerTest {
     Map<String, Set<String>> annotationIndex = db.getAnnotationIndex();
     Set<String> entities = annotationIndex.get(ExpressionCommand.class.getName());
     Assert.assertTrue(entities.contains(Echo.class.getName()));
-    Assert.assertEquals("echo",Class.forName(Echo.class.getName()).getAnnotation(ExpressionCommand.class).name());
+    Assert.assertEquals("echo", Class.forName(Echo.class.getName()).getAnnotation(ExpressionCommand.class).name());
   }
 
 }

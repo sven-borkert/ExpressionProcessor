@@ -25,10 +25,15 @@ public class ExpressionProcessor {
   private static Logger log = LogManager.getLogger(ExpressionProcessor.class);
 
   private static DateFormat formatter = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
-  private Map<String,Class> commandMap = new HashMap<>();
+  private static Map<String, Class> commandMap;
 
   public ExpressionProcessor() {
-    scanForCommandPlugins();
+    synchronized ("net.borkert.util.ExpressionProcessor") {
+      if (commandMap == null) {
+        commandMap = new HashMap<>();
+        scanForCommandPlugins();
+      }
+    }
   }
 
   private void scanForCommandPlugins() {
@@ -37,11 +42,12 @@ public class ExpressionProcessor {
       try {
         db.scanArchives(u);
       } catch (IOException ex) {
+        // Ignore
       }
     }
     Map<String, Set<String>> annotationIndex = db.getAnnotationIndex();
     Set<String> expressionCommands = annotationIndex.get(ExpressionCommand.class.getName());
-    for(String cmd : expressionCommands){
+    for (String cmd : expressionCommands) {
       try {
         String cmdName = Class.forName(cmd).getAnnotation(ExpressionCommand.class).name();
         commandMap.put(cmdName, Class.forName(cmd));
@@ -131,12 +137,12 @@ public class ExpressionProcessor {
   protected ExecutableExpressionCommand getCommandInstance(String name)
       throws ExpressionProcessorException {
     if (!commandMap.containsKey(name)) {
-      throw new ExpressionProcessorException("Command not available: " + name + " ("+name+")");
+      throw new ExpressionProcessorException("Command not available: " + name + " (" + name + ")");
     }
     try {
       return (ExecutableExpressionCommand) commandMap.get(name).newInstance();
     } catch (Exception ex) {
-      throw new ExpressionProcessorException("Failure instantiating: "+commandMap.get(name).getName(),ex);
+      throw new ExpressionProcessorException("Failure instantiating: " + commandMap.get(name).getName(), ex);
     }
   }
 

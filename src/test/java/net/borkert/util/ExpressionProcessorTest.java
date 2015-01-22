@@ -15,7 +15,7 @@ public class ExpressionProcessorTest {
 
   private ExpressionProcessor expressionProcessor = new ExpressionProcessor();
 
-  private char decimalSeparator = ((DecimalFormat)DecimalFormat.getInstance()).getDecimalFormatSymbols().getDecimalSeparator();
+  private char decimalSeparator = ((DecimalFormat) DecimalFormat.getInstance()).getDecimalFormatSymbols().getDecimalSeparator();
 
   @Test
   public void functionTest() throws ExpressionProcessorException {
@@ -103,9 +103,9 @@ public class ExpressionProcessorTest {
   public void formatTest()
       throws ExpressionProcessorException {
     Map<String, String> context = new HashMap<>();
-    context.put("SOMETHING.FORM.1.VAL", "124"+decimalSeparator+"46");
+    context.put("SOMETHING.FORM.1.VAL", "124" + decimalSeparator + "46");
     String result = getExpressionProcessor().process("#[format](\"${*.FORM.1.VAL}\",#####0.0000)", context);
-    Assert.assertEquals("124"+decimalSeparator+"4600", result);
+    Assert.assertEquals("124" + decimalSeparator + "4600", result);
   }
 
   public ExpressionProcessor getExpressionProcessor() {
